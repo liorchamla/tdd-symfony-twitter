@@ -1,9 +1,8 @@
 <?php
 
-namespace App\EventSubscriber;
+namespace App\Domain\Account\EventSubscriber;
 
-use App\Event\RegisterEvent;
-use Symfony\Bridge\Doctrine\IdGenerator\UuidV1Generator;
+use App\Domain\Account\Event\RegisterEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Uid\Uuid;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Event;
+namespace App\Domain\Account\Event;
 
 use App\Entity\User;
 use Symfony\Contracts\EventDispatcher\Event;

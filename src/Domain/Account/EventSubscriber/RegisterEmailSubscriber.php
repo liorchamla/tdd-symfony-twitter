@@ -1,13 +1,11 @@
 <?php
 
-namespace App\EventSubscriber;
+namespace App\Domain\Account\EventSubscriber;
 
-use App\Event\RegisterEvent;
-use Exception;
+use App\Domain\Account\Event\RegisterEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
-use Symfony\Component\Mime\RawMessage;
 
 class RegisterEmailSubscriber implements EventSubscriberInterface
 {

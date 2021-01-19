@@ -1,8 +1,8 @@
 <?php
 
-namespace App\EventSubscriber;
+namespace App\Domain\Account\EventSubscriber;
 
-use App\Event\RegisterEvent;
+use App\Domain\Account\Event\RegisterEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 

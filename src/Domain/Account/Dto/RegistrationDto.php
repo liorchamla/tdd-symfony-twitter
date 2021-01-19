@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller\Account\Dto;
+namespace App\Domain\Account\Dto;
 
 use App\Entity\User;
-use App\Validator\UniqueUsername;
+use App\Domain\Account\Validator\UniqueUsername;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class RegistrationDto
