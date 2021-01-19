@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-
-        {% block javascripts %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
-</html>
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Welcome!
+			{% endblock %}
+		</title>
+		<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.5.2/lumen/bootstrap.min.css'/> {% block stylesheets %}{% endblock %}{% block javascripts %}{% endblock %}
+		</head>
+		<body>
+			{% include "shared/navbar.html.twig" %}
+			<main class="container pt-5"> {% block body %}{% endblock %}
+				</main>
+			</body>
+		</html>

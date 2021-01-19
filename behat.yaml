@@ -1,0 +1,7 @@
+default:
+  suites:
+    registration:
+      contexts:
+        - 'RegistrationContext'
+      paths:
+        - '%paths.base%/features/registration.feature'
