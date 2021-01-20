@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\Feature\Registration;
+namespace App\Tests\Feature\Account;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
