@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -61,6 +63,16 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $confirmationToken;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Tweet::class, mappedBy="author")
+     */
+    private $tweets;
+
+    public function __construct()
+    {
+        $this->tweets = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -179,6 +191,36 @@ class User implements UserInterface
     public function setConfirmationToken(?string $confirmationToken): self
     {
         $this->confirmationToken = $confirmationToken;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tweet[]
+     */
+    public function getTweets(): Collection
+    {
+        return $this->tweets;
+    }
+
+    public function addTweet(Tweet $tweet): self
+    {
+        if (!$this->tweets->contains($tweet)) {
+            $this->tweets[] = $tweet;
+            $tweet->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTweet(Tweet $tweet): self
+    {
+        if ($this->tweets->removeElement($tweet)) {
+            // set the owning side to null (unless already changed)
+            if ($tweet->getAuthor() === $this) {
+                $tweet->setAuthor(null);
+            }
+        }
 
         return $this;
     }

@@ -6,6 +6,10 @@ account:
   resource: ../../src/Domain/Account/Controller/
   type: annotation
 
+tweet:
+  resource: ../../src/Domain/Tweet/Controller/
+  type: annotation
+
 kernel:
   resource: ../../src/Kernel.php
   type: annotation

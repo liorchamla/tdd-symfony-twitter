@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	{% if is_granted('ROLE_USER') %}
+		<section class="tweet-form">
+			{{ form_start(tweetForm, {'attr': {'class': 'create-tweet'}})}}
+
+			{{ form_widget(tweetForm) }}
+
+			<button type="submit" class="btn btn-primary">Tweet</button>
+
+			{{ form_end(tweetForm) }}
+		</section>
+	{% endif %}
+{% endblock %}

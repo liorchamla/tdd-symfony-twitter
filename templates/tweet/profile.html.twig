@@ -1,0 +1,19 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	<h1 class="username">@{{ user.username }}</h1>
+
+	{% if is_granted('ROLE_USER') %}
+		<a href="" class="btn btn-primary follow">S'abonner</a>
+	{% endif %}
+
+	<hr>
+
+	<section class="tweets">
+		{% for tweet in user.tweets %}
+			<div class="tweet">
+				{{ tweet.content }}
+			</div>
+		{% endfor %}
+	</section>
+{% endblock %}
