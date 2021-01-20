@@ -114,6 +114,9 @@
     "evenement/evenement": {
         "version": "v3.0.1"
     },
+    "fakerphp/faker": {
+        "version": "v1.13.0"
+    },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.3"
     },
@@ -662,5 +665,11 @@
     },
     "yosymfony/resource-watcher": {
         "version": "v2.0.1"
+    },
+    "zenstruck/callback": {
+        "version": "v1.2.0"
+    },
+    "zenstruck/foundry": {
+        "version": "v1.7.0"
     }
 }

@@ -2,10 +2,8 @@
 
 namespace App\Tests\Feature\Account;
 
-use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Factory\UserFactory;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
 
 class LoginTest extends WebTestCase
@@ -27,21 +25,10 @@ class LoginTest extends WebTestCase
 
         $client->request('GET', '/login');
 
-        /** @var UserPasswordEncoderInterface */
-        $encoder = self::$container->get(UserPasswordEncoderInterface::class);
-
-        $user = new User;
-        $user->setEmail('lior@mail.com')
-            ->setUsername('Liorozore')
-            ->setPassword($encoder->encodePassword($user, 'password'))
-            ->setAvatar('toto.jpg')
-            ->setActive(true);
-
-        self::$container->get(EntityManagerInterface::class)->persist($user);
-        self::$container->get(EntityManagerInterface::class)->flush();
+        $user = UserFactory::createOne();
 
         $client->submitForm('Connexion', [
-            'login[usernameOrEmail]' => 'Liorozore',
+            'login[usernameOrEmail]' => $user->getUsername(),
             'login[plainPassword]' => 'password'
         ]);
 
@@ -54,21 +41,10 @@ class LoginTest extends WebTestCase
 
         $client->request('GET', '/login');
 
-        /** @var UserPasswordEncoderInterface */
-        $encoder = self::$container->get(UserPasswordEncoderInterface::class);
-
-        $user = new User;
-        $user->setEmail('lior@mail.com')
-            ->setUsername('Liorozore')
-            ->setPassword($encoder->encodePassword($user, 'password'))
-            ->setAvatar('toto.jpg')
-            ->setActive(true);
-
-        self::$container->get(EntityManagerInterface::class)->persist($user);
-        self::$container->get(EntityManagerInterface::class)->flush();
+        $user = UserFactory::createOne();
 
         $client->submitForm('Connexion', [
-            'login[usernameOrEmail]' => 'lior@mail.com',
+            'login[usernameOrEmail]' => $user->getEmail(),
             'login[plainPassword]' => 'password'
         ]);
 
@@ -99,23 +75,12 @@ class LoginTest extends WebTestCase
     {
         $client = static::createClient();
 
-        /** @var UserPasswordEncoderInterface */
-        $encoder = self::$container->get(UserPasswordEncoderInterface::class);
-
-        $user = new User;
-        $user->setEmail('lior@mail.com')
-            ->setUsername('Liorozore')
-            ->setPassword($encoder->encodePassword($user, 'password'))
-            ->setAvatar('toto.jpg')
-            ->setActive(true);
-
-        self::$container->get(EntityManagerInterface::class)->persist($user);
-        self::$container->get(EntityManagerInterface::class)->flush();
+        $user = UserFactory::createOne();
 
         $client->request('GET', '/login');
 
         $client->submitForm('Connexion', [
-            'login[usernameOrEmail]' => 'Liorozore',
+            'login[usernameOrEmail]' => $user->getUsername(),
             'login[plainPassword]' => 'noone'
         ]);
 
@@ -130,23 +95,14 @@ class LoginTest extends WebTestCase
     {
         $client = static::createClient();
 
-        /** @var UserPasswordEncoderInterface */
-        $encoder = self::$container->get(UserPasswordEncoderInterface::class);
-
-        $user = new User;
-        $user->setEmail('lior@mail.com')
-            ->setUsername('Liorozore')
-            ->setPassword($encoder->encodePassword($user, 'password'))
-            ->setAvatar('toto.jpg')
-            ->setActive(false);
-
-        self::$container->get(EntityManagerInterface::class)->persist($user);
-        self::$container->get(EntityManagerInterface::class)->flush();
+        $user = UserFactory::createOne([
+            'active' => false
+        ]);
 
         $client->request('GET', '/login');
 
         $client->submitForm('Connexion', [
-            'login[usernameOrEmail]' => 'Liorozore',
+            'login[usernameOrEmail]' => $user->getUsername(),
             'login[plainPassword]' => 'password'
         ]);
 
