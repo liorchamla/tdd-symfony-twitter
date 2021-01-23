@@ -69,9 +69,57 @@ class User implements UserInterface
      */
     private $tweets;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Follow::class, mappedBy="follower")
+     */
+    private $following;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Follow::class, mappedBy="followed")
+     */
+    private $followers;
+
     public function __construct()
     {
         $this->tweets = new ArrayCollection();
+        $this->following = new ArrayCollection();
+        $this->followers = new ArrayCollection();
+    }
+
+    /**
+     * Get followers as User entities instead of Follow entities
+     *
+     * @return Collection<User>
+     */
+    public function followedByUsers(): Collection
+    {
+        return $this->followers->map(fn (Follow $f) => $f->getFollower());
+    }
+
+    /**
+     * Get all following users
+     *
+     * @return Collection<User>
+     */
+    public function followingUsers(): Collection
+    {
+        return $this->following->map(fn (Follow $f) => $f->getFollowed());
+    }
+
+    public function isFollowing(User $user): bool
+    {
+        return $this->following->filter(fn (Follow $f) => $f->getFollowed()->getId() === $user->getId())->count() > 0;
+    }
+
+    public function getFollowingByUsername(string $username): ?Follow
+    {
+        $follow = $this->following->filter(fn (Follow $f) => $f->getFollowed()->getUsername() === $username)->first();
+
+        if (!$follow) {
+            return null;
+        }
+
+        return $follow;
     }
 
     public function getId(): ?int
@@ -219,6 +267,70 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($tweet->getAuthor() === $this) {
                 $tweet->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Follow[]
+     */
+    public function getFollowing(): Collection
+    {
+        return $this->following;
+    }
+
+    public function addFollowing(Follow $following): self
+    {
+        if (!$this->following->contains($following)) {
+            $this->following[] = $following;
+            $following->setFollower($this);
+
+            $following->getFollowed()->addFollower($following);
+        }
+
+        return $this;
+    }
+
+    public function removeFollowing(Follow $following): self
+    {
+        if ($this->following->removeElement($following)) {
+            // set the owning side to null (unless already changed)
+            if ($following->getFollower() === $this) {
+                $following->setFollower(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Follow[]
+     */
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+
+    public function addFollower(Follow $follower): self
+    {
+        if (!$this->followers->contains($follower)) {
+            $this->followers[] = $follower;
+            $follower->setFollowed($this);
+
+            $follower->getFollower()->addFollowing($follower);
+        }
+
+        return $this;
+    }
+
+    public function removeFollower(Follow $follower): self
+    {
+        if ($this->followers->removeElement($follower)) {
+            // set the owning side to null (unless already changed)
+            if ($follower->getFollowed() === $this) {
+                $follower->setFollowed(null);
             }
         }
 

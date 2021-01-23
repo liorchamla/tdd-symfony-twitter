@@ -114,8 +114,14 @@
     "evenement/evenement": {
         "version": "v3.0.1"
     },
+    "facade/ignition-contracts": {
+        "version": "1.0.2"
+    },
     "fakerphp/faker": {
         "version": "v1.13.0"
+    },
+    "filp/whoops": {
+        "version": "2.9.1"
     },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.3"
@@ -143,6 +149,24 @@
     },
     "nikic/php-parser": {
         "version": "v4.10.4"
+    },
+    "nunomaduro/collision": {
+        "version": "v5.2.0"
+    },
+    "pestphp/pest": {
+        "version": "v1.0.1"
+    },
+    "pestphp/pest-plugin": {
+        "version": "v1.0.0"
+    },
+    "pestphp/pest-plugin-coverage": {
+        "version": "v1.0.0"
+    },
+    "pestphp/pest-plugin-expectations": {
+        "version": "v1.0.1"
+    },
+    "pestphp/pest-plugin-init": {
+        "version": "v1.0.0"
     },
     "phar-io/manifest": {
         "version": "2.0.1"

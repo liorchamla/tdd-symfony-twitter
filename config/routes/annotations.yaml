@@ -10,6 +10,10 @@ tweet:
   resource: ../../src/Domain/Tweet/Controller/
   type: annotation
 
+following:
+  resource: ../../src/Domain/Following/Controller/
+  type: annotation
+
 kernel:
   resource: ../../src/Kernel.php
   type: annotation
