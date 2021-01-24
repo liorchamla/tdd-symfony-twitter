@@ -3,13 +3,8 @@
 namespace App\Domain\Following\Controller;
 
 use App\Domain\Following\Handler\FollowHandler;
-use App\Entity\Follow as EntityFollow;
-use App\Entity\User;
 use App\Repository\UserRepository;
-use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -36,13 +31,17 @@ class Follow extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $user = $this->userRepository->findOneByUsername($request->get('username'));
+        $followed = $this->userRepository->findOneByUsername($request->get('username'));
 
-        if (!$user) {
+        if (!$followed) {
             throw  $this->createNotFoundException();
         }
 
-        $this->followHandler->addFollowLinkBetweenUsers($this->getUser(), $user);
+        if (!$this->isGranted('CAN_FOLLOW', $followed)) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->followHandler->addFollowLinkBetweenUsers($this->getUser(), $followed);
 
         return $this->redirectToRoute('tweet_profile', ['username' => $request->request->get('username')]);
     }

@@ -2,10 +2,10 @@
 
 namespace App\Tests\Feature\Following;
 
+use App\Factory\FollowFactory;
 use App\Factory\UserFactory;
 use App\Repository\FollowRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Routing\RouterInterface;
 
 class FollowTest extends WebTestCase
 {

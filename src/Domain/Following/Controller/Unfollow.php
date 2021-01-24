@@ -44,12 +44,11 @@ class Unfollow extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        /** @var User */
-        $follower = $this->getUser();
-
-        if ($this->followHandler->removeFollowLinkBetweenUsers($follower, $followed) === false) {
+        if (!$this->isGranted('CAN_UNFOLLOW', $followed)) {
             throw $this->createNotFoundException();
         }
+
+        $this->followHandler->removeFollowLinkBetweenUsers($this->getUser(), $followed);
 
         return $this->redirectToRoute('tweet_profile', ['username' => $request->get('username')]);
     }

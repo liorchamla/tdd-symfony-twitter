@@ -3,10 +3,11 @@
 {% block body %}
 	<h1 class="username">@{{ user.username }}</h1>
 
-	{% if is_granted('ROLE_USER') and not app.user.isFollowing(user)%}
+	{% if is_granted('CAN_FOLLOW', user) %}
 		<a href="" class="btn btn-primary follow">S'abonner</a>
 	{% endif %}
-	{% if is_granted('ROLE_USER') and app.user.isFollowing(user)  %}
+
+	{% if is_granted('CAN_UNFOLLOW', user)  %}
 		<a href="" class="btn btn-danger unfollow">Se désabonner</a>
 	{% endif %}
 
