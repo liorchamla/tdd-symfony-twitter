@@ -1,6 +1,7 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
+	<h1>Welcome to Tweeter !</h1>
 	{% if is_granted('ROLE_USER') %}
 		<section class="tweet-form">
 			{{ form_start(tweetForm, {'attr': {'class': 'create-tweet'}})}}
@@ -11,5 +12,28 @@
 
 			{{ form_end(tweetForm) }}
 		</section>
+
+		<section class="tweets">
+			{% for tweet in tweets %}
+				<div class="tweet">
+					{{ tweet.content }}
+				</div>
+			{% endfor %}
+		</section>
+	{% else %}
+		<div class="row">
+			<div class="col">
+				<h2>Lorem ipsum dolor sit amet.</h2>
+				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit temporibus sunt dolore corporis aut hic nesciunt architecto eos eum doloribus.</p>
+				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias inventore rem porro commodi magnam neque.</p>
+			</div>
+			<div class="col">
+				<h2>Lorem ipsum dolor sit amet.</h2>
+				<a href="{{ path('account_login') }}" class="btn btn-primary btn-lg login">Connexion</a>
+				<a href="{{ path('account_register') }}" class="btn btn-primary btn-outline btn-lg register">Créer un compte</a>
+			</div>
+		</div>
 	{% endif %}
+
+
 {% endblock %}

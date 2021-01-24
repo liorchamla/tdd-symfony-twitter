@@ -2,7 +2,10 @@
 
 namespace App\Repository;
 
+
+use App\Entity\Follow;
 use App\Entity\Tweet;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,6 +20,21 @@ class TweetRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Tweet::class);
+    }
+
+    public function findAllViewableTweetsByUser(User $u = null)
+    {
+        if (!$u) {
+            return [];
+        }
+
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.deletedAt IS NULL')
+            ->andWhere('t.author = :follower OR t.author IN (:followed)')
+            ->setParameter('follower', $u)
+            ->setParameter('followed', $u->getFollowing()->map(fn (Follow $f) => $f->getFollowed()))
+            ->getQuery()
+            ->getResult();
     }
 
     // /**

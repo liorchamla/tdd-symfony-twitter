@@ -3,6 +3,7 @@
 namespace App\Domain\Tweet\Controller;
 
 use App\Domain\Tweet\Form\TweetType;
+use App\Repository\TweetRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,14 +15,17 @@ class Home extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function __invoke(RouterInterface $router): Response
+    public function __invoke(RouterInterface $router, TweetRepository $tweetRepository): Response
     {
         $form = $this->createForm(TweetType::class, null, [
             'action' => $router->generate('tweet_create')
         ]);
 
+        $tweets = $tweetRepository->findAllViewableTweetsByUser($this->getUser());
+
         return $this->render("tweet/home.html.twig", [
-            'tweetForm' => $form->createView()
+            'tweetForm' => $form->createView(),
+            'tweets' => $tweets
         ]);
     }
 }
