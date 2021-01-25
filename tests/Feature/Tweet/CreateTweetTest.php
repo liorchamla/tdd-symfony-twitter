@@ -4,16 +4,22 @@ namespace App\Tests\Feature\Tweet;
 
 use App\Factory\UserFactory;
 use App\Repository\TweetRepository;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class CreateTweetTest extends WebTestCase
 {
+    protected KernelBrowser $client;
+
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
+
     /** @test */
     public function as_an_anonymous_user_we_cant_see_tweet_form_on_home()
     {
-        $client = static::createClient();
-
-        $client->request('GET', '/');
+        $this->client->request('GET', '/');
 
         $this->assertSelectorNotExists('form.create-tweet');
     }
@@ -23,11 +29,9 @@ class CreateTweetTest extends WebTestCase
     {
         $user = UserFactory::createOne();
 
-        $client = static::createClient();
+        $this->client->loginUser($user->object());
 
-        $client->loginUser($user->object());
-
-        $client->request('GET', '/');
+        $this->client->request('GET', '/');
 
         $this->assertSelectorExists('form.create-tweet');
     }
@@ -37,15 +41,13 @@ class CreateTweetTest extends WebTestCase
     {
         $user = UserFactory::createOne();
 
-        $client = static::createClient();
+        $this->client->loginUser($user->object());
 
-        $client->loginUser($user->object());
-
-        $crawler = $client->request('GET', '/');
+        $crawler = $this->client->request('GET', '/');
 
         $form = $crawler->selectButton('Tweet')->form();
 
-        $client->submit($form, [
+        $this->client->submit($form, [
             'tweet[content]' => "Hello World!"
         ]);
 

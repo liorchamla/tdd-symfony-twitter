@@ -16,10 +16,11 @@ class ProfileTest extends WebTestCase
 
         $user = UserFactory::createOne();
 
-        $tweets = TweetFactory::createMany(mt_rand(10, 30), [
+        $tweets = TweetFactory::createMany(mt_rand(3, 5), [
             'author' => $user,
             'deletedAt' => null
         ]);
+
 
         $crawler = $client->request('GET', '/@' . $user->getUsername());
         $this->assertEquals(count($tweets), $crawler->filter('.tweet')->count());

@@ -15,9 +15,7 @@
 
 	<section class="tweets">
 		{% for tweet in user.tweets %}
-			<div class="tweet">
-				{{ tweet.content }}
-			</div>
+			{% include "tweet/_tweet.html.twig" %}
 		{% endfor %}
 	</section>
 {% endblock %}

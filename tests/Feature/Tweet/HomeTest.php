@@ -5,16 +5,23 @@ namespace App\Tests\Feature\Tweet;
 use App\Factory\FollowFactory;
 use App\Factory\TweetFactory;
 use App\Factory\UserFactory;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class HomeTest extends WebTestCase
 {
+    protected KernelBrowser $client;
+
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
     /** @test */
     public function anonymous_user_should_not_see_form_or_tweets()
     {
-        $client = static::createClient();
 
-        $client->request('GET', '/');
+
+        $this->client->request('GET', '/');
 
         $this->assertSelectorNotExists('.tweet');
         $this->assertSelectorNotExists('.tweet-form');
@@ -23,9 +30,9 @@ class HomeTest extends WebTestCase
     /** @test */
     public function anonymous_user_should_see_an_invitation_to_login_or_register()
     {
-        $client = static::createClient();
 
-        $client->request('GET', '/');
+
+        $this->client->request('GET', '/');
 
         $this->assertSelectorExists('.login');
         $this->assertSelectorExists('.register');
@@ -34,7 +41,7 @@ class HomeTest extends WebTestCase
     /** @test */
     public function authenticated_follower_see_his_tweets_and_his_following_tweets()
     {
-        $client = static::createClient();
+
         $follower = UserFactory::createOne();
 
         $followeds = UserFactory::createMany(5);
@@ -60,9 +67,9 @@ class HomeTest extends WebTestCase
             );
         }
 
-        $client->loginUser($follower->object());
+        $this->client->loginUser($follower->object());
 
-        $crawler = $client->request('GET', '/');
+        $crawler = $this->client->request('GET', '/');
 
         $totalNumberOfTweets = count($followedsTweets) + count($followerTweets);
 

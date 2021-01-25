@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TweetRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,6 +39,26 @@ class Tweet
      */
     private $deletedAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Tweet::class, inversedBy="retweets")
+     */
+    private $retweeting;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Tweet::class, mappedBy="retweeting")
+     */
+    private $retweets;
+
+    public function __construct()
+    {
+        $this->retweets = new ArrayCollection();
+    }
+
+    public function isRetweet()
+    {
+        return $this->retweeting !== null;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -63,6 +85,10 @@ class Tweet
     {
         $this->author = $author;
 
+        if (!$author->getTweets()->contains($this)) {
+            $author->getTweets()->add($this);
+        }
+
         return $this;
     }
 
@@ -86,6 +112,48 @@ class Tweet
     public function setDeletedAt(?\DateTimeInterface $deletedAt): self
     {
         $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    public function getRetweeting(): ?self
+    {
+        return $this->retweeting;
+    }
+
+    public function setRetweeting(?self $retweeting): self
+    {
+        $this->retweeting = $retweeting;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getRetweets(): Collection
+    {
+        return $this->retweets;
+    }
+
+    public function addRetweet(self $retweet): self
+    {
+        if (!$this->retweets->contains($retweet)) {
+            $this->retweets[] = $retweet;
+            $retweet->setRetweeting($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRetweet(self $retweet): self
+    {
+        if ($this->retweets->removeElement($retweet)) {
+            // set the owning side to null (unless already changed)
+            if ($retweet->getRetweeting() === $this) {
+                $retweet->setRetweeting(null);
+            }
+        }
 
         return $this;
     }

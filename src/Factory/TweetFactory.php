@@ -31,6 +31,7 @@ final class TweetFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
+            'author' => UserFactory::createOne(),
             'content' => $this->faker()->paragraph(),
             'createdAt' => $this->faker()->dateTimeBetween('-6 months'),
             'deletedAt' => $this->faker()->boolean(95) ? null : $this->faker()->dateTimeBetween('-6 months')

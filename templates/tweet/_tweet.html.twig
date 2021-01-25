@@ -1,0 +1,26 @@
+{% if tweet.isRetweet %}
+	{% set retweet = tweet.retweeting %}
+	<div class="tweet">
+		{{ retweet.author.username }}
+		a tweeté :
+		<blockquote>
+			{{ retweet.content }}
+		</blockquote>
+
+		{% if app.user %}
+			<a href="" class="retweet">Retweeter</a>
+		{% endif %}
+	</div>
+{% else %}
+	<div class="tweet">
+		{{ tweet.author.username }}
+		a tweeté :
+		<blockquote>
+			{{ tweet.content }}
+		</blockquote>
+
+		{% if app.user %}
+			<a href="" class="retweet">Retweeter</a>
+		{% endif %}
+	</div>
+{% endif %}
